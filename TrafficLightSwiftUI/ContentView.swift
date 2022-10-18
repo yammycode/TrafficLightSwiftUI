@@ -7,15 +7,42 @@
 
 import SwiftUI
 
+enum Light {
+    case red
+    case yellow
+    case green
+}
+
 struct ContentView: View {
+
+    @State var activeLight: Light?
+
+    var buttonLabel: String {
+        activeLight == nil ? "START" : "NEXT"
+    }
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        ZStack {
+            Rectangle().fill(.orange.gradient)
+            VStack {
+                TrafficLightView(activeLight: activeLight)
+                Spacer()
+                ButtonView(label: buttonLabel, action: setActiveLight)
+            }
+            .padding(.vertical, 100)
         }
-        .padding()
+        .ignoresSafeArea()
+    }
+
+    private func setActiveLight() {
+        switch activeLight {
+        case .red:
+            activeLight = .yellow
+        case .yellow:
+            activeLight = .green
+        default:
+            activeLight = .red
+        }
     }
 }
 
